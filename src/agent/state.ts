@@ -1,5 +1,7 @@
-import { BaseMessage, BaseMessageLike } from "@langchain/core/messages";
+import { BaseMessage, BaseMessageLike, MessageContent } from "@langchain/core/messages";
 import { Annotation, messagesStateReducer } from "@langchain/langgraph";
+import { type z } from 'zod';
+import { DayTrainingSchema, TrainingBlockSchema, TrainingWeekReflectionSchema } from "./schemas/training.js";
 
 /**
  * A graph's StateAnnotation defines three main things:
@@ -44,6 +46,19 @@ export const StateAnnotation = Annotation.Root({
    *     If a message in \`right\` has the same ID as a message in \`left\`, the
    *     message from \`right\` will replace the message from \`left\`.`
    */
+  clientAssessment: Annotation<string>(),
+  currentDay: Annotation<Weekday | null>(),
+  trainingBlockTemplate: Annotation<z.infer<typeof TrainingBlockSchema>>(),
+  templateReflection: Annotation<MessageContent>(),
+  days: Annotation<z.infer<typeof DayTrainingSchema>[], z.infer<typeof DayTrainingSchema>>({
+    reducer: (a, b) => a.concat(b),
+    default: () => []
+  }),
+  trainingWeekReflection: Annotation<z.infer<typeof TrainingWeekReflectionSchema>>(),
+  finalWeekOfTraining: Annotation<z.infer<typeof DayTrainingSchema>[], z.infer<typeof DayTrainingSchema>>({
+    reducer: (a, b) => a.concat(b),
+    default: () => []
+  }),
   messages: Annotation<BaseMessage[], BaseMessageLike[]>({
     reducer: messagesStateReducer,
     default: () => [],

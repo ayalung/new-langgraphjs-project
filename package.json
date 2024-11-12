@@ -22,7 +22,9 @@
   },
   "dependencies": {
     "@langchain/core": "^0.3.2",
-    "@langchain/langgraph": "^0.2.5"
+    "@langchain/langgraph": "^0.2.5",
+    "@langchain/openai": "^0.3.12",
+    "zod": "^3.23.8"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3.1.0",
